@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="cameralayout">
+        <attr format="reference" name="contentView"/>
+        <attr format="reference" name="centerView"/>
+        <attr format="reference" name="leftDownView"/>
+        <attr format="reference" name="rightUpView"/>
+        <attr format="reference" name="idCardExamView"/>
+        <attr format="reference" name="idCardBackExamView"/>
+        <attr format="reference" name="bankCardExamView"/>
+    </declare-styleable>
+</resources>

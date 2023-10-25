@@ -1,0 +1,28 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url 'http://10.8.22.22:8081/repository/android-release/'
+            allowInsecureProtocol = true
+            credentials {
+                username 'aar'
+                password '7gsrc6n7AfYmK7L'
+            }
+        }
+    }
+}
+rootProject.name = "UiKitDemo"
+include ':app'
+include ':banner'
+include ':recyclerviewkit'
+include ':tabkit'
+include ':camerakit'
