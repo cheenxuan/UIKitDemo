@@ -118,6 +118,9 @@ class CropView : View {
     }
 
     fun crop(frame: Rect): Bitmap? {
+        
+//        val rectCrop = Rect(this.left,this.top,this.right,this.bottom)
+        
         val scale = getScale()
         val src = floatArrayOf(frame.left.toFloat(), frame.top.toFloat())
         val desc = floatArrayOf(0f, 0f)
@@ -288,6 +291,7 @@ class CropView : View {
         var result = scaleGestureDetector!!.onTouchEvent(event)
         result = gestureDetector!!.onTouchEvent(event) || result
         return result || super.onTouchEvent(event)
+//        return super.onTouchEvent(event)
     }
 
     private var restrictBound: Rect? = null

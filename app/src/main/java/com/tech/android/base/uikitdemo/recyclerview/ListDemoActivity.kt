@@ -7,7 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.tech.android.base.uikitdemo.R
+import com.umpay.linkageguest.R
+
 import com.tech.android.ui.recyclerviewkit.RvEmptyView
 import com.tech.android.ui.recyclerviewkit.RvRecyclerView
 import com.tech.android.ui.recyclerviewkit.item.RvAdapter

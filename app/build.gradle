@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.tech.android.base.uikitdemo'
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.tech.android.base.uikitdemo"
         minSdk 24
-        targetSdk 31
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -45,6 +45,9 @@ dependencies {
     implementation project(path: ':banner')
     implementation 'com.github.bumptech.glide:glide:4.15.1'
 
+    implementation 'com.guolindev.permissionx:permissionx:1.7.1'
+
+    implementation project(path: ':base_update')
     implementation project(path: ':recyclerviewkit')
     implementation project(path: ':camerakit')
 }

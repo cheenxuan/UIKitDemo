@@ -4,7 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.tech.android.base.uikitdemo.R
+import com.umpay.linkageguest.R
+
 
 class RecyclerViewDemoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

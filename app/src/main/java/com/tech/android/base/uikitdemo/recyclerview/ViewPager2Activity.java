@@ -7,7 +7,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.tech.android.base.uikitdemo.R;
+import com.umpay.linkageguest.R;
 import com.tech.android.base.uikitdemo.recyclerview.adapter.ViewPager2FragmentAdapter;
 import com.tech.android.base.uikitdemo.recyclerview.bean.MenuBean;
 import java.util.ArrayList;

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <application
         android:allowBackup="true"
@@ -10,23 +11,26 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.UiKitDemo"
-        android:requestLegacyExternalStorage="true"
         tools:targetApi="31">
         <activity
-            android:name=".camera.CoreCameraActivity"
+            android:name="com.tech.android.base.uikitdemo.update.UpdateActivity"
             android:exported="false" />
-        <activity android:name=".recyclerview.PageGridInViewPagerActivity" />
-        <activity android:name=".recyclerview.PageGridLayoutActivity" />
-        <activity android:name=".recyclerview.GlideActivity" />
-        <activity android:name=".recyclerview.ViewPagerActivity" />
-        <activity android:name=".recyclerview.ViewPager2Activity" />
-        <activity android:name=".recyclerview.List1Activity" />
-        <activity android:name=".recyclerview.ListDemoActivity" />
-        <activity android:name=".recyclerview.RecyclerViewDemoActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.tech.android.base.uikitdemo.camera.CoreCameraActivity"
+            android:exported="false" />
+        <activity android:name="com.tech.android.base.uikitdemo.recyclerview.PageGridInViewPagerActivity" />
+        <activity android:name="com.tech.android.base.uikitdemo.recyclerview.PageGridLayoutActivity" />
+        <activity android:name="com.tech.android.base.uikitdemo.recyclerview.GlideActivity" />
+        <activity android:name="com.tech.android.base.uikitdemo.recyclerview.ViewPagerActivity" />
+        <activity android:name="com.tech.android.base.uikitdemo.recyclerview.ViewPager2Activity" />
+        <activity android:name="com.tech.android.base.uikitdemo.recyclerview.List1Activity" />
+        <activity android:name="com.tech.android.base.uikitdemo.recyclerview.ListDemoActivity" />
+        <activity android:name="com.tech.android.base.uikitdemo.recyclerview.RecyclerViewDemoActivity" />
+        <activity
+            android:name="com.tech.android.base.uikitdemo.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BannerDemoActivity" />
+        <activity android:name="com.tech.android.base.uikitdemo.BannerDemoActivity" />
     </application>
 
 </manifest>

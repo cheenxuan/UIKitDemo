@@ -2,16 +2,10 @@ package com.tech.android.ui.camerakit.view
 
 import android.content.Context
 import android.graphics.*
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
-import android.util.TypedValue
-import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.annotation.IntDef
 import com.tech.android.ui.camerakit.Camera1Control
 import com.tech.android.ui.camerakit.CameraThreadPool
@@ -51,12 +45,12 @@ class CameraView : FrameLayout {
 
 
     private var maskType = 0
-    
+
     @IntDef(ORIENTATION_PORTRAIT, ORIENTATION_HORIZONTAL, ORIENTATION_INVERT)
     annotation class Orientation
 
     private val cameraViewTakePictureCallback = CameraViewTakePictureCallback()
-    
+
     private var cameraControl: ICameraControl? = null
 
     /**
@@ -72,7 +66,7 @@ class CameraView : FrameLayout {
     /**
      * 用于显示提示证 "请对齐身份证正面" 之类的背景
      */
-//    private var hintView: ImageView? = null
+    private var hintView: ImageView? = null
 
     /**
      * 用于显示提示证 "请对齐身份证正面" 之类的文字
@@ -111,8 +105,8 @@ class CameraView : FrameLayout {
         maskView = MaskView(context)
         addView(maskView)
 
-//        hintView = ImageView(context)
-//        addView(hintView)
+        hintView = ImageView(context)
+        addView(hintView)
 //
 //        hintViewTextWrapper = LinearLayout(context)
 //        hintViewTextWrapper!!.orientation = LinearLayout.VERTICAL
@@ -133,18 +127,18 @@ class CameraView : FrameLayout {
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         displayView?.layout(left, 0, right, bottom - top)
         maskView?.layout(left, 0, right, bottom - top)
-//        val hintViewWidth: Int = DimensUtil.dpToPx(250)
-//        val hintViewHeight: Int = DimensUtil.dpToPx(25)
-//        val hintViewLeft = (width - hintViewWidth) / 2
-//        val hintViewTop: Int = (maskView?.getFrameRect()?.bottom ?: 0) + DimensUtil.dpToPx(16)
+        val hintViewWidth: Int = DimensUtil.dpToPx(250)
+        val hintViewHeight: Int = DimensUtil.dpToPx(25)
+        val hintViewLeft = (width - hintViewWidth) / 2
+        val hintViewTop: Int = (maskView?.getFrameRect()?.bottom ?: 0) + DimensUtil.dpToPx(16)
 //        hintViewTextWrapper?.layout(
 //            hintViewLeft, hintViewTop,
 //            hintViewLeft + hintViewWidth, hintViewTop + hintViewHeight
 //        )
-//        hintView?.layout(
-//            hintViewLeft, hintViewTop,
-//            hintViewLeft + hintViewWidth, hintViewTop + hintViewHeight
-//        )
+        hintView?.layout(
+            hintViewLeft, hintViewTop,
+            hintViewLeft + hintViewWidth, hintViewTop + hintViewHeight
+        )
     }
 
     fun start() {
@@ -176,35 +170,38 @@ class CameraView : FrameLayout {
 //    }
 
     fun setMaskType(@MaskView.MaskType maskType: Int, ctx: Context?) {
-//        maskView?.setMaskType(maskType)
-//        maskView?.visibility = VISIBLE
-//        hintView?.visibility = VISIBLE
-//        var hintResourceId: Int = R.drawable.camera_hint_align_id_card
-//        this.maskType = maskType
-//        var isNeedSetImage = true
-//        when (maskType) {
-//            MaskView.MASK_TYPE_ID_CARD_FRONT -> {
-//                hintResourceId = R.drawable.camera_round_corner
-//                isNeedSetImage = false
-//            }
-//            MaskView.MASK_TYPE_ID_CARD_BACK -> {
-//                isNeedSetImage = false
-//                hintResourceId = R.drawable.camera_round_corner
-//            }
-//            MaskView.MASK_TYPE_BANK_CARD -> hintResourceId = R.drawable.camera_hint_align_bank_card
-//            MaskView.MASK_TYPE_NONE -> {
-//                maskView?.visibility = INVISIBLE
-//                hintView?.visibility = INVISIBLE
-//            }
-//            else -> {
-//                maskView?.visibility = INVISIBLE
-//                hintView?.visibility = INVISIBLE
-//            }
-//        }
-//        if (isNeedSetImage) {
-//            hintView?.setImageResource(hintResourceId)
+        maskView?.setMaskType(maskType)
+        maskView?.visibility = VISIBLE
+        hintView?.visibility = VISIBLE
+        var hintResourceId = R.drawable.camera_hint_align_id_card
+        this.maskType = maskType
+        var isNeedSetImage = false
+        when (maskType) {
+            MaskView.MASK_TYPE_ID_CARD_FRONT -> {
+                hintResourceId = R.drawable.camera_hint_align_id_card
+                isNeedSetImage = true
+            }
+            MaskView.MASK_TYPE_ID_CARD_BACK -> {
+                hintResourceId = R.drawable.camera_hint_align_id_card_back
+                isNeedSetImage = true
+            }
+            MaskView.MASK_TYPE_BANK_CARD -> {
+                hintResourceId = R.drawable.camera_hint_align_bank_card
+                isNeedSetImage = true
+            }
+            MaskView.MASK_TYPE_NONE -> {
+                maskView?.visibility = INVISIBLE
+                hintView?.visibility = INVISIBLE
+            }
+            else -> {
+                maskView?.visibility = INVISIBLE
+                hintView?.visibility = INVISIBLE
+            }
+        }
+        if (isNeedSetImage) {
+            hintView?.setImageResource(hintResourceId)
 //            hintViewTextWrapper?.visibility = INVISIBLE
-//        }
+        }
 //        if (maskType == MaskView.MASK_TYPE_ID_CARD_FRONT) {
 //            cameraControl?.setDetectCallback(object : ICameraControl.OnDetectPictureCallback {
 //                override fun onDetect(data: ByteArray, rotation: Int): Int {
@@ -350,12 +347,13 @@ class CameraView : FrameLayout {
     private fun crop(outputFile: File, data: ByteArray, rotation: Int): Bitmap? {
         try {
             val previewFrame = cameraControl?.getPreviewFrame()
-            if (maskView == null 
+            if (maskView == null
                 || maskView?.width == 0
-                || maskView?.height == 0 
+                || maskView?.height == 0
                 || previewFrame == null
-                || previewFrame.width() == 0 
-                || previewFrame.height() == 0) {
+                || previewFrame.width() == 0
+                || previewFrame.height() == 0
+            ) {
                 return null
             }
 
@@ -364,36 +362,108 @@ class CameraView : FrameLayout {
             val width = if (rotation % 180 == 0) decoder.width else decoder.height
             val height = if (rotation % 180 == 0) decoder.height else decoder.width
             val frameRect = maskView!!.getFrameRect()
+            println("--------width =$width----------------")
+            println("--------height =$height----------------")
+
+            println("--------maskView left =${maskView?.left}----------------")
+            println("--------maskView top =${maskView?.top}----------------")
+            println("--------maskView right =${maskView?.right}----------------")
+            println("--------maskView bottom =${maskView?.bottom}----------------")
+
+            println("--------previewFrame left =${previewFrame?.left}----------------")
+            println("--------previewFrame top =${previewFrame?.top}----------------")
+            println("--------previewFrame right =${previewFrame?.right}----------------")
+            println("--------previewFrame bottom =${previewFrame?.bottom}----------------")
+
             var left = width * frameRect.left / maskView!!.width
             var top = height * frameRect.top / maskView!!.height
             var right = width * frameRect.right / maskView!!.width
             var bottom = height * frameRect.bottom / maskView!!.height
 
-            // 高度大于图片
+            // 高度大于图片 
             if (previewFrame.top < 0) {
-                // 宽度对齐。
-                val adjustedPreviewHeight =
-                    previewFrame.height() * getWidth() / previewFrame.width()
-                val topInFrame = (adjustedPreviewHeight - frameRect.height()) / 2 * getWidth() / previewFrame.width()
-                val bottomInFrame = ((adjustedPreviewHeight + frameRect.height()) / 2 * getWidth() / previewFrame.width())
+                val scaleWidth = width.toFloat() / previewFrame.width().toFloat()
+                val scaleHeight = getWidth().toFloat() / previewFrame.width().toFloat()
+                
+                val adjustedPreviewWidth = previewFrame.width().toFloat() * scaleWidth
+                val adjustedPreviewHeight = previewFrame.height() * scaleHeight
+                
+                val scale = getHeight().toFloat() / previewFrame.height().toFloat()
+                
+                // 等比例投射到照片当中。
+                if (scaleWidth != 1f) {
+                    left =
+                        ((adjustedPreviewWidth - frameRect.width() * scale * scaleWidth) / 2f).toInt()
+                    right =
+                        ((adjustedPreviewWidth + frameRect.width() * scale * scaleWidth) / 2f).toInt()
+                }
+
+                val topInFrame =
+                    (adjustedPreviewHeight - frameRect.height()) / 2 * getWidth() / previewFrame.width()
+                val bottomInFrame =
+                    ((adjustedPreviewHeight + frameRect.height()) / 2 * getWidth() / previewFrame.width())
+                // 等比例投射到照片当中。
+                top = (topInFrame * height / previewFrame.height()).toInt()
+                bottom = (bottomInFrame * height / previewFrame.height()).toInt()
+            } else if (previewFrame.left < 0) {
+                val scaleHeight = height.toFloat() / previewFrame.height().toFloat()
+                val adjustedPreviewHeight = previewFrame.height().toFloat() * scaleHeight
+
+                val scaleWidth = getHeight().toFloat() / previewFrame.height().toFloat()
+                val scale = getWidth().toFloat() / previewFrame.width().toFloat()
+              
+                // 等比例投射到照片当中。
+                if (scaleHeight != 1f) {
+                    top = ((adjustedPreviewHeight - frameRect.height() * scale * scaleHeight) / 2f).toInt()
+                    bottom = ((adjustedPreviewHeight + frameRect.height() * scale * scaleHeight) / 2f).toInt()
+                }
+
+                // 高度对齐
+                val adjustedPreviewWidth = previewFrame.width() * scaleWidth
+                val leftInFrame = (adjustedPreviewWidth - maskView!!.getFrameRect().width()) / 2 * scaleWidth
+                val rightInFrame = (adjustedPreviewWidth + maskView!!.getFrameRect().width()) / 2 * scaleWidth
 
                 // 等比例投射到照片当中。
-                top = topInFrame * height / previewFrame.height()
-                bottom = bottomInFrame * height / previewFrame.height()
-            } else {
-                // 宽度大于图片
-                if (previewFrame.left < 0) {
-                    // 高度对齐
-                    val adjustedPreviewWidth =
-                        previewFrame.width() * getHeight() / previewFrame.height()
-                    val leftInFrame = ((adjustedPreviewWidth - maskView!!.getFrameRect()!!.width()) / 2 * getHeight() / previewFrame.height())
-                    val rightInFrame = ((adjustedPreviewWidth + maskView!!.getFrameRect()!!.width()) / 2 * getHeight() / previewFrame.height())
-
-                    // 等比例投射到照片当中。
-                    left = leftInFrame * width / previewFrame.width()
-                    right = rightInFrame * width / previewFrame.width()
-                }
+                left = (leftInFrame * width / previewFrame.width()).toInt()
+                right = (rightInFrame * width / previewFrame.width()).toInt()
             }
+
+            // 高度大于图片
+//            if (previewFrame.top < 0) {
+//                // 宽度对齐。
+//                val adjustedPreviewHeight =
+//                    previewFrame.height() * getWidth() / previewFrame.width()
+//                val topInFrame = (adjustedPreviewHeight - frameRect.height()) / 2 * getWidth() / previewFrame.width()
+//                val bottomInFrame = ((adjustedPreviewHeight + frameRect.height()) / 2 * getWidth()
+//                        / previewFrame.width())
+//
+//                // 等比例投射到照片当中。
+//                top = topInFrame * height / previewFrame.height()
+//                bottom = bottomInFrame * height / previewFrame.height()
+//            } else {
+//                // 宽度大于图片
+//                if (previewFrame.left < 0) {
+//                    // 高度对齐
+//                    val adjustedPreviewWidth =
+//                        previewFrame.width() * getHeight() / previewFrame.height()
+//                    val leftInFrame = ((adjustedPreviewWidth - maskView!!.getFrameRect()
+//                        .width()) / 2 * getHeight()
+//                            / previewFrame.height())
+//                    val rightInFrame = ((adjustedPreviewWidth + maskView!!.getFrameRect()
+//                        .width()) / 2 * getHeight()
+//                            / previewFrame.height())
+//
+//                    // 等比例投射到照片当中。
+//                    left = leftInFrame * width / previewFrame.width()
+//                    right = rightInFrame * width / previewFrame.width()
+//                }
+//            }
+
+            println("--------left =$left----------------")
+            println("--------top =$top----------------")
+            println("--------right =$right----------------")
+            println("--------bottom =$bottom----------------")
+
             val region = Rect()
             region.left = left
             region.top = top
@@ -460,15 +530,15 @@ class CameraView : FrameLayout {
     inner class CameraViewTakePictureCallback : ICameraControl.OnTakePictureCallback {
         var file: File? = null
         var callback: OnTakePictureCallback? = null
-        
+
         override fun onPictureTaken(data: ByteArray?) {
             CameraThreadPool.execute {
                 if (file != null && data != null) {
                     val rotation: Int = ImageUtil.getOrientation(data)
                     val bitmap: Bitmap? = crop(file!!, data, rotation)
                     callback?.onPictureTaken(bitmap)
-                }else{
-                    callback?.onPictureTaken(null)   
+                } else {
+                    callback?.onPictureTaken(null)
                 }
             }
         }

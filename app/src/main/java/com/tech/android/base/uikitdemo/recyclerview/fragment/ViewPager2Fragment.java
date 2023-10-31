@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.tech.android.base.uikitdemo.R;
+import com.umpay.linkageguest.R;
 import com.tech.android.base.uikitdemo.recyclerview.bean.TestBean;
 import com.tech.android.ui.recyclerviewkit.item.RvAdapter;
 import com.tech.android.ui.recyclerviewkit.item.RvDataItem;

@@ -2,21 +2,26 @@ package com.tech.android.ui.camerakit
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.Rect
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
+import android.view.Surface
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
+import com.tech.android.ui.camerakit.utils.ImageUtil
 import com.tech.android.ui.camerakit.view.*
 import java.io.File
 import java.io.FileOutputStream
@@ -165,11 +170,7 @@ open class CameraActivity : FragmentActivity() {
     }
 
     private val cropConfirmButtonListener = View.OnClickListener {
-        val rect: Rect? = when (cropMaskView?.getMaskType()!!) {
-            MaskView.MASK_TYPE_BANK_CARD, MaskView.MASK_TYPE_ID_CARD_BACK, MaskView.MASK_TYPE_ID_CARD_FRONT -> cropMaskView?.getFrameRect()
-            MaskView.MASK_TYPE_NONE -> overlayView?.getFrameRect()
-            else -> overlayView?.getFrameRect()
-        }
+        val rect: Rect? = cropMaskView?.getOriginFrameRect()
         val cropped: Bitmap? = cropView?.crop(rect!!)
         displayImageView?.setImageBitmap(cropped)
         cropAndConfirm()
@@ -231,6 +232,7 @@ open class CameraActivity : FragmentActivity() {
             .setOnClickListener(cropCancelButtonListener)
 
         setOrientation()
+//        setOrientation(resources.configuration)
         initParams()
 //        cameraView?.setAutoPictureCallback(autoTakePictureCallback)
     }
@@ -241,6 +243,34 @@ open class CameraActivity : FragmentActivity() {
         cropContainer?.setOrientation(CameraLayout.ORIENTATION_HORIZONTAL)
         confirmResultContainer?.setOrientation(CameraLayout.ORIENTATION_HORIZONTAL)
     }
+//    private  fun setOrientation(newConfig: Configuration) {
+//        val rotation = windowManager.defaultDisplay.rotation
+//        val orientation: Int
+//        var cameraViewOrientation = CameraView.ORIENTATION_PORTRAIT
+//        when (newConfig.orientation) {
+//            Configuration.ORIENTATION_PORTRAIT -> {
+//                cameraViewOrientation = CameraView.ORIENTATION_PORTRAIT
+//                orientation = CameraLayout.ORIENTATION_PORTRAIT
+//            }
+//            Configuration.ORIENTATION_LANDSCAPE -> {
+//                orientation = CameraLayout.ORIENTATION_HORIZONTAL
+//                cameraViewOrientation =
+//                    if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90) {
+//                        CameraView.ORIENTATION_HORIZONTAL
+//                    } else {
+//                        CameraView.ORIENTATION_INVERT
+//                    }
+//            }
+//            else -> {
+//                orientation = CameraLayout.ORIENTATION_PORTRAIT
+//                cameraView!!.setOrientation(CameraView.ORIENTATION_PORTRAIT)
+//            }
+//        }
+//        takePictureContainer!!.setOrientation(orientation)
+//        cameraView!!.setOrientation(cameraViewOrientation)
+//        cropContainer!!.setOrientation(orientation)
+//        confirmResultContainer!!.setOrientation(orientation)
+//    }
 
     private fun initParams() {
         val outputPath = intent.getStringExtra(KEY_OUTPUT_FILE_PATH)
@@ -400,20 +430,17 @@ open class CameraActivity : FragmentActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_PICK_IMAGE) {
-            if (resultCode == RESULT_OK) {
-                val uri = data?.data
-                cropView?.setFilePath(getRealPathFromURI(uri))
-                showCrop()
-            } else {
-                cameraView?.getCameraControl()?.resume()
-            }
-
             if (resultCode == Activity.RESULT_OK) {
                 try {
                     if (data != null) {
                         val uri: Uri = data.data ?: return
-                        cropView?.setFilePath(getRealPathFromURI(uri))
-                        showCrop()
+                        val bitmap = setFilePath(getRealPathFromURI(uri))
+                        if (bitmap == null) {
+                            handlePickImageFailed()
+                        } else {
+                            displayImageView?.setImageBitmap(bitmap)
+                            showResultConfirm()
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -451,6 +478,51 @@ open class CameraActivity : FragmentActivity() {
             cursor.close()
         }
         return result
+    }
+
+    private fun setFilePath(path: String?): Bitmap? {
+        if (path == null) {
+            return null
+        }
+        var bitmap: Bitmap? = null
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        val original = BitmapFactory.decodeFile(path, options)
+        try {
+            val exif = ExifInterface(path)
+            val rotation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            )
+            val matrix = Matrix()
+            val rotationInDegrees: Int = ImageUtil.exifToDegrees(rotation)
+            if (rotation.toFloat() != 0f) {
+                matrix.preRotate(rotationInDegrees.toFloat())
+            }
+
+            // 图片太大会导致内存泄露，所以在显示前对图片进行裁剪。
+            val maxPreviewImageSize = 2560
+            var min = Math.min(options.outWidth, options.outHeight)
+            min = Math.min(min, maxPreviewImageSize)
+            val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val screenSize = Point()
+            windowManager.defaultDisplay.getSize(screenSize)
+            min = Math.min(min, screenSize.x * 2 / 3)
+            options.inSampleSize = ImageUtil.calculateInSampleSize(options, min, min)
+            options.inScaled = true
+            options.inDensity = options.outWidth
+            options.inTargetDensity = min * options.inSampleSize
+            options.inPreferredConfig = Bitmap.Config.RGB_565
+            options.inJustDecodeBounds = false
+            bitmap = BitmapFactory.decodeFile(path, options)
+            return bitmap
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return original
+        } catch (e: NullPointerException) {
+            e.printStackTrace()
+            return null
+        }
     }
 
     override fun onRequestPermissionsResult(

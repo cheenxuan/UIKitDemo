@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.tech.android.base.uikitdemo.R;
+import com.umpay.linkageguest.R;
 import com.tech.android.base.uikitdemo.recyclerview.bean.GlideBean;
 import com.tech.android.ui.recyclerviewkit.item.RvAdapter;
 import com.tech.android.ui.recyclerviewkit.item.RvDataItem;

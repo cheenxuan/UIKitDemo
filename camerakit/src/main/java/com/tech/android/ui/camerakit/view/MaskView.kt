@@ -40,23 +40,23 @@ class MaskView : View {
 
     private var maskColor = Color.argb(100, 0, 0, 0)
 
-//    private val eraser = Paint(Paint.ANTI_ALIAS_FLAG)
-//    private val pen = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val eraser = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val pen = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private val frame = Rect()
     private val path = Path()
 
-//    private var locatorDrawable: Drawable? = null
+    private var locatorDrawable: Drawable? = null
 
     init {
         // 硬件加速不支持，图层混合。
         setLayerType(LAYER_TYPE_SOFTWARE, null)
 
-//        pen.color = Color.WHITE
-//        pen.style = Paint.Style.STROKE
-//        pen.setStrokeWidth(6f)
-//
-//        eraser.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+        pen.color = Color.WHITE
+        pen.style = Paint.Style.STROKE
+        pen.setStrokeWidth(6f)
+
+        eraser.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
     }
 
     constructor(context: Context) : this(context, null) {}
@@ -84,6 +84,10 @@ class MaskView : View {
         }
     }
 
+    fun getOriginFrameRect(): Rect {
+        return Rect(0, 0, width, height)
+    }
+
     fun setLineColor(lineColor: Int) {
         this.lineColor = lineColor
     }
@@ -105,19 +109,19 @@ class MaskView : View {
 
     fun setMaskType(@MaskType maskType: Int) {
         this.maskType = maskType
-//        when (maskType) {
-//            MASK_TYPE_ID_CARD_FRONT -> locatorDrawable = ResourcesCompat.getDrawable(
-//                resources,
-//                R.drawable.camera_id_card_locator_front, null
-//            )
-//            MASK_TYPE_ID_CARD_BACK -> locatorDrawable = ResourcesCompat.getDrawable(
-//                resources,
-//                R.drawable.camera_id_card_locator_back, null
-//            )
-//            MASK_TYPE_BANK_CARD -> {}
-//            MASK_TYPE_NONE -> {}
-//            else -> {}
-//        }
+        when (maskType) {
+            MASK_TYPE_ID_CARD_FRONT -> locatorDrawable = ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.camera_id_card_locator_front, null
+            )
+            MASK_TYPE_ID_CARD_BACK -> locatorDrawable = ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.camera_id_card_locator_back, null
+            )
+            MASK_TYPE_BANK_CARD -> {}
+            MASK_TYPE_NONE -> {}
+            else -> {}
+        }
         invalidate()
     }
 
@@ -130,60 +134,60 @@ class MaskView : View {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         if (w > 0 && h > 0) {
-//            val ratio = if (h > w) 0.9f else 0.72f
-//            val width = (w * ratio).toInt()
-//            val height = width * 400 / 620
-//            val left = (w - width) / 2
-//            val top = (h - height) / 2
-//            val right = width + left
-//            val bottom = height + top
-            frame.left = 0
-            frame.top = 0
-            frame.right = w
-            frame.bottom = h
+            val ratio = if (h > w) 0.9f else 0.72f
+            val width = (w * ratio).toInt()
+            val height = width * 400 / 620
+            val left = (w - width) / 2
+            val top = (h - height) / 2
+            val right = width + left
+            val bottom = height + top
+            frame.left = left
+            frame.top = top
+            frame.right = right
+            frame.bottom = bottom
         }
     }
 
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-//        val frame = frame
-//        val width = frame.width()
-//        val height = frame.height()
-//        val left = frame.left
-//        val top = frame.top
-//        val right = frame.right
-//        val bottom = frame.bottom
-//        canvas.drawColor(maskColor)
-//        fillRectRound(
-//            left.toFloat(),
-//            top.toFloat(),
-//            right.toFloat(),
-//            bottom.toFloat(),
-//            30f,
-//            30f,
-//            false
-//        )
-//        canvas.drawPath(path, pen)
-//        canvas.drawPath(path, eraser)
-//        if (maskType == MASK_TYPE_ID_CARD_FRONT) {
-//            locatorDrawable!!.setBounds(
-//                (left + 601f / 1006 * width).toInt(),
-//                (top + 110f / 632 * height).toInt(),
-//                (left + 963f / 1006 * width).toInt(),
-//                (top + 476f / 632 * height).toInt()
-//            )
-//        } else if (maskType == MASK_TYPE_ID_CARD_BACK) {
-//            locatorDrawable!!.setBounds(
-//                (left + 51f / 1006 * width).toInt(),
-//                (top + 48f / 632 * height).toInt(),
-//                (left + 250f / 1006 * width).toInt(),
-//                (top + 262f / 632 * height).toInt()
-//            )
-//        }
-//        if (locatorDrawable != null) {
-//            locatorDrawable!!.draw(canvas)
-//        }
+        val frame = frame
+        val width = frame.width()
+        val height = frame.height()
+        val left = frame.left
+        val top = frame.top
+        val right = frame.right
+        val bottom = frame.bottom
+        canvas.drawColor(maskColor)
+        fillRectRound(
+            left.toFloat(),
+            top.toFloat(),
+            right.toFloat(),
+            bottom.toFloat(),
+            30f,
+            30f,
+            false
+        )
+        canvas.drawPath(path, pen)
+        canvas.drawPath(path, eraser)
+        if (maskType == MASK_TYPE_ID_CARD_FRONT) {
+            locatorDrawable?.setBounds(
+                (left + 601f / 1006 * width).toInt(),
+                (top + 110f / 632 * height).toInt(),
+                (left + 963f / 1006 * width).toInt(),
+                (top + 476f / 632 * height).toInt()
+            )
+        } else if (maskType == MASK_TYPE_ID_CARD_BACK) {
+            locatorDrawable?.setBounds(
+                (left + 51f / 1006 * width).toInt(),
+                (top + 48f / 632 * height).toInt(),
+                (left + 250f / 1006 * width).toInt(),
+                (top + 262f / 632 * height).toInt()
+            )
+        }
+        if (locatorDrawable != null) {
+            locatorDrawable?.draw(canvas)
+        }
     }
 
 

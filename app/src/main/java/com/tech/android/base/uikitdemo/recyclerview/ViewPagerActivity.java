@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.tech.android.base.uikitdemo.R;
+import com.umpay.linkageguest.R;
 import com.tech.android.base.uikitdemo.recyclerview.adapter.ViewPagerFragmentAdapter;
 import com.tech.android.base.uikitdemo.recyclerview.bean.MenuBean;
 

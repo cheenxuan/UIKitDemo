@@ -6,6 +6,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.tech.android.base.uikitdemo.banner.BannerInfo
 import com.tech.android.ui.banner.*
+import com.umpay.linkageguest.R
 
 class BannerDemoActivity : AppCompatActivity() {
     

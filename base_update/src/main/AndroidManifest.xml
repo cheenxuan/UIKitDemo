@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <queries>
+        <!--华为应用市场-->
+        <package android:name="com.huawei.appmarket" />
+        <!--小米应用商店-->
+        <package android:name="com.xiaomi.market" />
+        <!--OPPO软件商店-->
+        <package android:name="com.oppo.market" />
+        <!--VIVO应用商店-->
+        <package android:name="com.bbk.appstore" />
+        <!--三星应用商店-->
+        <package android:name="com.sec.android.app.samsungapps" />
+        <!--ONePLUS应用商店-->
+        <package android:name="com.heytap.market" />
+    </queries>
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application>
+        <service android:name=".service.FileDownloadService"/>
+
+        <provider
+            android:name=".utils.InstallFileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/install_file" />
+        </provider>
+    </application>
+</manifest>

@@ -1,0 +1,51 @@
+apply plugin: 'maven-publish'
+
+task generateSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier 'sources'
+}
+
+def versionName = "0.0.1"
+
+publishing {
+    publications {
+        Production(MavenPublication) {
+            groupId = "app.android.base"
+            artifactId = "update"
+            version = versionName
+            // 依赖 bundleReleaseAar 任务，并上传其产出的aar
+            afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
+            // 也可以指定上传的AAR包，但是需要先手动生成aar
+//             artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")            
+            // 上传source，这样使用放可以看到方法注释
+            artifact generateSourcesJar
+            // pom文件中声明依赖，从而传递到使用方
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+                configurations.implementation.allDependencies.each {
+                    // 避免出现空节点或 artifactId=unspecified 的节点
+                    if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                        println it.toString()
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                        dependencyNode.appendNode('scope', 'implementation')
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        
+        maven {
+            url = "http://10.8.22.22:8081/repository/android-release/"
+            allowInsecureProtocol = true
+            // 仓库用户名密码
+            credentials {
+                username = "aar"
+                password = "7gsrc6n7AfYmK7L"
+            }
+        }
+    }
+}

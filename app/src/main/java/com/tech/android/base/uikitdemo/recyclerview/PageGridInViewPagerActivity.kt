@@ -2,7 +2,8 @@ package com.tech.android.base.uikitdemo.recyclerview
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.tech.android.base.uikitdemo.R
+import com.umpay.linkageguest.R
+
 
 class PageGridInViewPagerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

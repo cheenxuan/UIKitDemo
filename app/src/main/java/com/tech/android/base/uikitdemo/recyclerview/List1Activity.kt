@@ -4,7 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.tech.android.base.uikitdemo.R
+import com.umpay.linkageguest.R
+
 import com.tech.android.ui.recyclerviewkit.item.RvDataItem
 import com.tech.android.ui.recyclerviewkit.item.RvViewHolder
 

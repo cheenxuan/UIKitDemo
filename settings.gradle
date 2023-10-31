@@ -18,6 +18,7 @@ dependencyResolutionManagement {
                 password '7gsrc6n7AfYmK7L'
             }
         }
+        
     }
 }
 rootProject.name = "UiKitDemo"
@@ -26,3 +27,4 @@ include ':banner'
 include ':recyclerviewkit'
 include ':tabkit'
 include ':camerakit'
+include ':base_update'

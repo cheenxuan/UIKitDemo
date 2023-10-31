@@ -6,17 +6,21 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.tech.android.base.uikitdemo.camera.CoreCameraActivity
 import com.tech.android.base.uikitdemo.recyclerview.RecyclerViewDemoActivity
-import com.tech.android.ui.camerakit.CameraActivity.Companion.BANK_CARD
-import com.tech.android.ui.camerakit.CameraActivity.Companion.ID_CARD_BACK
+import com.tech.android.base.uikitdemo.update.UpdateActivity
 import com.tech.android.ui.camerakit.CameraActivity.Companion.ID_CARD_FRONT
 import com.tech.android.ui.camerakit.CameraActivity.Companion.KEY_CONTENT_TYPE
 import com.tech.android.ui.camerakit.CameraActivity.Companion.KEY_OUTPUT_FILE_PATH
+import com.umpay.linkageguest.R
 
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        println(android.os.Build::class.java.fields.map { "Build.${it.name} = ${it.get(it.name)}" }
+            .joinToString("\n"))
+
 
         val bannerDemo = findViewById<Button>(R.id.banner_demo)
         bannerDemo.setOnClickListener {
@@ -32,10 +36,18 @@ class MainActivity : AppCompatActivity() {
         cameraDemo.setOnClickListener {
             val intent = Intent(this@MainActivity, CoreCameraActivity::class.java)
             val bundle = Bundle()
-            bundle.putString(KEY_CONTENT_TYPE, BANK_CARD)
-            bundle.putString(KEY_OUTPUT_FILE_PATH, applicationContext.filesDir.absolutePath +"/pic_aaa.jpg")
+            bundle.putString(KEY_CONTENT_TYPE, ID_CARD_FRONT)
+            bundle.putString(
+                KEY_OUTPUT_FILE_PATH,
+                applicationContext.filesDir.absolutePath + "/pic_aaa.jpg"
+            )
             intent.putExtras(bundle)
             startActivity(intent)
+        }
+
+        val updateDemo = findViewById<Button>(R.id.update_demo)
+        updateDemo.setOnClickListener {
+            startActivity(Intent(this@MainActivity, UpdateActivity::class.java))
         }
     }
 }

@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.tech.android.base.uikitdemo.R;
+import com.umpay.linkageguest.R;
 
 
 public class EmptyFragment extends Fragment {

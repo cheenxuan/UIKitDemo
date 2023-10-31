@@ -12,8 +12,7 @@
             android:id="@+id/display_image_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/camera_id_card_locator_front"/>
+            android:layout_gravity="center"/>
 
     <ImageView
             android:id="@+id/cancel_button"
