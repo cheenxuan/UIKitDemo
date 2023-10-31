@@ -13,7 +13,7 @@ import javax.net.ssl.X509TrustManager
 
 
 /**
- * @auther: xuan
+ * @auther: QinjianXuan
  * @date  : 2023/10/30 .
  * <P>
  * Description:
@@ -28,7 +28,7 @@ object FileDownloadManager {
             .addNetworkInterceptor(Interceptor { chain ->
                 val originalResponse: Response = chain.proceed(chain.request())
                 originalResponse.newBuilder()
-                    .body(ProgressResponseBody(originalResponse.body!!, listener))
+                    .body(ProgressResponseBody(originalResponse.body()!!, listener))
                     .build()
             })
             .sslSocketFactory(trustAllSSLSocketFactory(), trustAllManager)

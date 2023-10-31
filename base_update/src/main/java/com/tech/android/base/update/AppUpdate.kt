@@ -111,7 +111,7 @@ object AppUpdate {
         }
     }
 
-    fun storeUpdate(context: Context):Boolean {
+    fun storeUpdate(context: Context): Boolean {
         return !checkConfig(STORE_TYPE) || !checkCanUpdateFromStore(context.applicationContext)
     }
 
@@ -140,7 +140,7 @@ object AppUpdate {
                 StoreInstallUtil.MARKET_PACKAGER_NAME_HUA_WEI
             )
         ) {
-            return storeUpdate(context, StoreInstallUtil.MARKET_PACKAGER_NAME_HUA_WEI)
+            return updateFormStore(context, StoreInstallUtil.MARKET_PACKAGER_NAME_HUA_WEI)
         }
 
         //荣耀手机
@@ -151,7 +151,7 @@ object AppUpdate {
                 StoreInstallUtil.MARKET_PACKAGER_NAME_HUA_WEI
             )
         ) {
-            return storeUpdate(context, StoreInstallUtil.MARKET_PACKAGER_NAME_HUA_WEI)
+            return updateFormStore(context, StoreInstallUtil.MARKET_PACKAGER_NAME_HUA_WEI)
         }
 
         //小米手机
@@ -163,7 +163,7 @@ object AppUpdate {
                 StoreInstallUtil.MARKET_PACKAGER_NAME_XIAO_MI
             )
         ) {
-            return storeUpdate(context, StoreInstallUtil.MARKET_PACKAGER_NAME_XIAO_MI)
+            return updateFormStore(context, StoreInstallUtil.MARKET_PACKAGER_NAME_XIAO_MI)
         }
 
         //OPPO手机
@@ -178,9 +178,9 @@ object AppUpdate {
             ))
         ) {
 
-            return if (storeUpdate(context, StoreInstallUtil.MARKET_PACKAGER_NAME_OPPO)) {
+            return if (updateFormStore(context, StoreInstallUtil.MARKET_PACKAGER_NAME_OPPO)) {
                 true
-            } else storeUpdate(context, StoreInstallUtil.MARKET_PACKAGER_NAME_ONE_PLUS)
+            } else updateFormStore(context, StoreInstallUtil.MARKET_PACKAGER_NAME_ONE_PLUS)
 
         }
 
@@ -193,7 +193,7 @@ object AppUpdate {
                 StoreInstallUtil.MARKET_PACKAGER_NAME_VIVO
             )
         ) {
-            return storeUpdate(context, StoreInstallUtil.MARKET_PACKAGER_NAME_VIVO)
+            return updateFormStore(context, StoreInstallUtil.MARKET_PACKAGER_NAME_VIVO)
         }
 
         //三星手机
@@ -204,7 +204,7 @@ object AppUpdate {
                 StoreInstallUtil.MARKET_PACKAGER_NAME_SAMSUNG
             )
         ) {
-            return storeUpdate(context, StoreInstallUtil.MARKET_PACKAGER_NAME_SAMSUNG)
+            return updateFormStore(context, StoreInstallUtil.MARKET_PACKAGER_NAME_SAMSUNG)
         }
 
 
@@ -219,13 +219,13 @@ object AppUpdate {
                 StoreInstallUtil.MARKET_PACKAGER_NAME_ONE_PLUS
             )
         ) {
-            return storeUpdate(context, StoreInstallUtil.MARKET_PACKAGER_NAME_ONE_PLUS)
+            return updateFormStore(context, StoreInstallUtil.MARKET_PACKAGER_NAME_ONE_PLUS)
         }
 
         return false
     }
 
-    private fun storeUpdate(context: Context, marketPkg: String?): Boolean {
+    private fun updateFormStore(context: Context, marketPkg: String?): Boolean {
         return launchAppDetail(context, marketPkg)
     }
 
@@ -236,9 +236,12 @@ object AppUpdate {
      */
     private fun launchAppDetail(context: Context, marketPkg: String?): Boolean {
         try {
-            val appPkg = "com.umpay.linkageguest"
+            val appPkg =
+                if (getUpdateConfig()?.packageName.isNullOrBlank()) context.packageName else getUpdateConfig()?.packageName
             if (appPkg.isNullOrBlank()) return false
-            val uri: Uri = Uri.parse("market://details?id=$appPkg")
+            val targetUri =
+                if (getUpdateConfig()?.targetStoreUri.isNullOrBlank()) "market://details?id=$appPkg" else getUpdateConfig()?.targetStoreUri
+            val uri: Uri = Uri.parse(targetUri)
             val intent = Intent(Intent.ACTION_VIEW, uri)
             if (marketPkg?.isNotBlank() == true) {
                 intent.setPackage(marketPkg)

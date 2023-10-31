@@ -1,7 +1,7 @@
 package com.tech.android.base.update.interfaces
 
 /**
- * @auther: xuan
+ * @auther: QinjianXuan
  * @date  : 2023/10/30 .
  * <P>
  * Description:

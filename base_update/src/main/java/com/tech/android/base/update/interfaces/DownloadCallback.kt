@@ -3,7 +3,7 @@ package com.tech.android.base.update.interfaces
 import android.content.Context
 
 /**
- * @auther: xuan
+ * @auther: QinjianXuan
  * @date  : 2023/10/30 .
  * <P>
  * Description:

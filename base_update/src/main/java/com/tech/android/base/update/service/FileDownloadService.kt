@@ -1,15 +1,11 @@
 package com.tech.android.base.update.service
 
-import android.Manifest
 import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.requestPermissions
-import androidx.core.content.ContextCompat
 import com.tech.android.base.update.download.FileDownloadManager
 import com.tech.android.base.update.interfaces.DownloadCallback
 import okhttp3.*
@@ -19,7 +15,7 @@ import java.io.IOException
 
 
 /**
- * @auther: xuan
+ * @auther: QinjianXuan
  * @date  : 2023/10/30 .
  * <P>
  * Description:
@@ -60,7 +56,7 @@ class FileDownloadService : Service() {
         destinationPath: String,
         callback: DownloadCallback? = null,
     ) {
-        
+
         startDownload(downloadUrl, destinationPath, callback)
     }
 
@@ -85,11 +81,11 @@ class FileDownloadService : Service() {
                 override fun onResponse(call: Call, response: Response) {
                     if (!response.isSuccessful) {
                         UpdateReceiver.send(this@FileDownloadService, -1)
-                        callback?.onDownloadFailed("Download failed with code: " + response.code)
+                        callback?.onDownloadFailed("Download failed with code: " + response.code())
                         return
                     }
 
-                    response.body?.let { responseBody ->
+                    response.body()?.let { responseBody ->
                         try {
                             val storagePrefix =
                                 destinationPath.substring(0, destinationPath.lastIndexOf("/") + 1)
@@ -150,8 +146,8 @@ class FileDownloadService : Service() {
             e.printStackTrace()
         }
     }
-    
-    
+
+
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(updateReceiver)

@@ -3,25 +3,22 @@ package com.tech.android.base.update.model
 import java.io.Serializable
 
 /**
- * @auther: xuan
+ * @auther: QinjianXuan
  * @date  : 2023/10/28 .
  * <P>
  * Description:
  * <P>
  */
 data class UpdateConfig(
-    val debug: Boolean = true,
     val isUpdateFromStore: Boolean = true,
+    val packageName:String = "",
+    val targetStoreUri:String = "",
     val targetBrandList: MutableList<String> = mutableListOf(),
     var apkUrl: String = "",
     var filePrefix: String = "",
     var filePath: String = "",
     val isShowNotification: Boolean = true,
     val notificationIconRes: Int = -1,
-    val requestHeaders: Map<String, Any> = mutableMapOf(),
-    val requestParams: Map<String, Any> = mutableMapOf(),
-    val isAutoDownloadBackground: Boolean = false,
-    val downloadProgressShowType: Int = 1,
 ) : Serializable {
 
 

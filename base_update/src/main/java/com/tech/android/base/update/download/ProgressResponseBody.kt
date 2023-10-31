@@ -1,15 +1,14 @@
 package com.tech.android.base.update.download
 
-import android.os.Handler
-import android.os.Looper
 import com.tech.android.base.update.interfaces.ProgressListener
 import okhttp3.MediaType
 import okhttp3.ResponseBody
 import okio.*
+import java.io.IOException
 
 
 /**
- * @auther: xuan
+ * @auther: QinjianXuan
  * @date  : 2023/10/30 .
  * <P>
  * Description:
@@ -32,7 +31,7 @@ class ProgressResponseBody(
 
     override fun source(): BufferedSource {
         if (bufferedSource == null) {
-            bufferedSource = source(responseBody.source()).buffer()
+            bufferedSource = Okio.buffer(source(responseBody.source()))
         }
         return bufferedSource!!
     }
