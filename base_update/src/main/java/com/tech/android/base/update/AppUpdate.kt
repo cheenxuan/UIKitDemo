@@ -105,10 +105,14 @@ object AppUpdate {
     fun update(context: Context) {
         //检查升级配置是否完整
         //优先使用商店更新
-        if (!checkConfig(STORE_TYPE) || !checkCanUpdateFromStore(context.applicationContext)) {
+        if (storeUpdate(context)) {
             //商店更新无效后，选择apk下载更新
             apkUpdate(context)
         }
+    }
+
+    fun storeUpdate(context: Context):Boolean {
+        return !checkConfig(STORE_TYPE) || !checkCanUpdateFromStore(context.applicationContext)
     }
 
     private fun checkConfig(type: String): Boolean {
