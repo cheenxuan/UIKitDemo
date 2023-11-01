@@ -13,6 +13,7 @@ import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.view.View
 import android.view.WindowManager
@@ -39,8 +40,8 @@ open class CameraActivity : FragmentActivity() {
         const val KEY_OUTPUT_FILE_PATH = "outputFilePath"
 
         const val CONTENT_TYPE_GENERAL = "TYPE_GENERAL"
-        const val ID_CARD_FRONT = "ID_CARD_FRONT"
-        const val ID_CARD_BACK = "ID_CARD_BACK"
+        const val ID_CARD_RS = "ID_CARD_RS"
+        const val ID_CARD_WS = "ID_CARD_WS"
         const val BANK_CARD = "BANK_CARD"
         const val TYPE_ALBUM = "TYPE_ALBUM"
 
@@ -79,7 +80,7 @@ open class CameraActivity : FragmentActivity() {
 
     private var outputFile: File? = null
     private var contentType: String? = null
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
     private var takePictureContainer: CameraLayout? = null
     private var cropContainer: CameraLayout? = null
     private var confirmResultContainer: CameraLayout? = null
@@ -281,12 +282,12 @@ open class CameraActivity : FragmentActivity() {
         }
         val maskType: Int
         when (contentType) {
-            ID_CARD_FRONT -> {
+            ID_CARD_RS -> {
                 maskType = MaskView.MASK_TYPE_ID_CARD_FRONT
                 overlayView?.visibility = View.INVISIBLE
                 idCardExamView?.visibility = View.VISIBLE
             }
-            ID_CARD_BACK -> {
+            ID_CARD_WS -> {
                 maskType = MaskView.MASK_TYPE_ID_CARD_BACK
                 overlayView?.visibility = View.INVISIBLE
                 idCardBackExamView?.visibility = View.VISIBLE
@@ -416,6 +417,8 @@ open class CameraActivity : FragmentActivity() {
     open fun hideLoading() {
 
     }
+
+    open fun getOutputFile() = outputFile
 
     open fun setRecResult(resultArr: HashMap<String, String?>) {
         hideLoading()
@@ -552,14 +555,19 @@ open class CameraActivity : FragmentActivity() {
 
     }
 
+    open fun restart() {
+        hideLoading()
+        handler.postDelayed({
+            showTakePicture()
+        }, 500)
+    }
+
     /**
      * 做一些收尾工作
-     *
      */
     open fun doClear() {
         CameraThreadPool.cancelAutoFocusTimer()
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
