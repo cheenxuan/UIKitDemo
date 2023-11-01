@@ -10,7 +10,7 @@ def versionName = "0.0.1"
 publishing {
     publications {
         Production(MavenPublication) {
-            groupId = "app.android.ui"
+            groupId = "app.android.base"
             artifactId = "camerakit"
             version = versionName
             // 依赖 bundleReleaseAar 任务，并上传其产出的aar
