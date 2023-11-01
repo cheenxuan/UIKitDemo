@@ -1,8 +1,6 @@
 package com.tech.android.base.uikitdemo.camera
 
-import android.util.Log
-import android.widget.Toast
-import com.tech.android.ui.camerakit.CameraActivity
+import com.tech.android.base.camerakit.CameraActivity
 
 class CoreCameraActivity : CameraActivity() {
 

@@ -7,9 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.tech.android.base.uikitdemo.camera.CoreCameraActivity
 import com.tech.android.base.uikitdemo.recyclerview.RecyclerViewDemoActivity
 import com.tech.android.base.uikitdemo.update.UpdateActivity
-import com.tech.android.ui.camerakit.CameraActivity.Companion.ID_CARD_FRONT
-import com.tech.android.ui.camerakit.CameraActivity.Companion.KEY_CONTENT_TYPE
-import com.tech.android.ui.camerakit.CameraActivity.Companion.KEY_OUTPUT_FILE_PATH
+import com.tech.android.base.camerakit.CameraActivity.Companion.ID_CARD_FRONT
+import com.tech.android.base.camerakit.CameraActivity.Companion.KEY_CONTENT_TYPE
+import com.tech.android.base.camerakit.CameraActivity.Companion.KEY_OUTPUT_FILE_PATH
 import com.umpay.linkageguest.R
 
 

@@ -10,6 +10,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {         // 添加Maven仓库地址
+            url 'https://maven.aliyun.com/nexus/content/repositories/releases/'
+        }
         maven {
             url 'http://10.8.22.22:8081/repository/android-release/'
             allowInsecureProtocol = true
@@ -26,5 +29,5 @@ include ':app'
 include ':banner'
 include ':recyclerviewkit'
 include ':tabkit'
-include ':camerakit'
 include ':base_update'
+include ':base_camerakit'
