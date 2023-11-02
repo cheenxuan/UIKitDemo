@@ -67,12 +67,9 @@ open class CameraActivity : FragmentActivity() {
         const val BANK_NAME = "bankName"
         const val BANK_CARD_TYPE = "bankCardType"
 
-
         const val REQUEST_CODE_PICK_IMAGE = 100
         const val PERMISSIONS_REQUEST_CAMERA = 800
         const val PERMISSIONS_EXTERNAL_STORAGE = 801
-
-        const val FAST_CLICK_DELAY_TIME = 1000
 
         const val IMAGE_MAX_WIDTH = 2560
         const val IMAGE_MAX_HEIGHT = 2560
@@ -80,7 +77,6 @@ open class CameraActivity : FragmentActivity() {
 
     private var outputFile: File? = null
     private var contentType: String? = null
-    private val handler = Handler(Looper.getMainLooper())
     private var takePictureContainer: CameraLayout? = null
     private var cropContainer: CameraLayout? = null
     private var confirmResultContainer: CameraLayout? = null
@@ -94,6 +90,7 @@ open class CameraActivity : FragmentActivity() {
     private var overlayView: FrameOverlayView? = null
     private var cropMaskView: MaskView? = null
     private var takePhotoBtn: ImageView? = null
+    val handler = Handler(Looper.getMainLooper())
     private val permissionCallback: PermissionCallback = object : PermissionCallback {
         override fun onRequestPermission(): Boolean {
             ActivityCompat.requestPermissions(
@@ -399,14 +396,14 @@ open class CameraActivity : FragmentActivity() {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
                 fileOutputStream.close()
 
-                makeFileSucc(contentType, outputFile?.absolutePath)
+                makeFileSucc(contentType)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
     }
 
-    open fun makeFileSucc(contentType: String?, filePath: String?) {
+    open fun makeFileSucc(contentType: String?) {
 
     }
 

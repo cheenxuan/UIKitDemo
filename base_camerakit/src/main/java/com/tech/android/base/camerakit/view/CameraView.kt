@@ -362,18 +362,6 @@ class CameraView : FrameLayout {
             val width = if (rotation % 180 == 0) decoder.width else decoder.height
             val height = if (rotation % 180 == 0) decoder.height else decoder.width
             val frameRect = maskView!!.getFrameRect()
-            println("--------width =$width----------------")
-            println("--------height =$height----------------")
-
-            println("--------maskView left =${maskView?.left}----------------")
-            println("--------maskView top =${maskView?.top}----------------")
-            println("--------maskView right =${maskView?.right}----------------")
-            println("--------maskView bottom =${maskView?.bottom}----------------")
-
-            println("--------previewFrame left =${previewFrame?.left}----------------")
-            println("--------previewFrame top =${previewFrame?.top}----------------")
-            println("--------previewFrame right =${previewFrame?.right}----------------")
-            println("--------previewFrame bottom =${previewFrame?.bottom}----------------")
 
             var left = width * frameRect.left / maskView!!.width
             var top = height * frameRect.top / maskView!!.height
@@ -459,11 +447,6 @@ class CameraView : FrameLayout {
 //                }
 //            }
 
-            println("--------left =$left----------------")
-            println("--------top =$top----------------")
-            println("--------right =$right----------------")
-            println("--------bottom =$bottom----------------")
-
             val region = Rect()
             region.left = left
             region.top = top
@@ -494,7 +477,7 @@ class CameraView : FrameLayout {
             options.inScaled = true
             options.inDensity = Math.max(options.outWidth, options.outHeight)
             options.inTargetDensity = size
-            options.inPreferredConfig = Bitmap.Config.RGB_565
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888
             var bitmap = decoder.decodeRegion(region, options)
             if (rotation != 0) {
                 // 只能是裁剪完之后再旋转了。有没有别的更好的方案呢？

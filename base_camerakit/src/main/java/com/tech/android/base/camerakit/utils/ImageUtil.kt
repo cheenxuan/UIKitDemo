@@ -18,7 +18,7 @@ import java.io.IOException
  * <P>
  */
 object ImageUtil {
-    
+
     private const val TAG = "CameraExif"
 
     fun exifToDegrees(exifOrientation: Int): Int {
@@ -67,9 +67,9 @@ object ImageUtil {
             }
 
             // Break if the marker is EXIF in APP1.
-            if (marker == 0xE1 
-                && length >= 8 
-                && pack(jpeg, offset + 2, 4, false) == 0x45786966 
+            if (marker == 0xE1
+                && length >= 8
+                && pack(jpeg, offset + 2, 4, false) == 0x45786966
                 && pack(jpeg, offset + 6, 2, false) == 0
             ) {
                 offset += 8
@@ -150,6 +150,7 @@ object ImageUtil {
         dstWidth: Int,
         dstHeight: Int,
         quality: Int = 100,
+        size: Int = 300,
     ) {
         try {
             var tempQuality = quality
@@ -175,7 +176,7 @@ object ImageUtil {
             val baos = ByteArrayOutputStream()
             try {
                 roughBitmap!!.compress(Bitmap.CompressFormat.JPEG, tempQuality, baos)
-                while (baos.toByteArray().size / 1024 > 280) {
+                while (baos.toByteArray().size / 1024 > size) {
                     baos.reset()
                     roughBitmap.compress(Bitmap.CompressFormat.JPEG, tempQuality, baos)
                     tempQuality -= 5
@@ -265,10 +266,11 @@ object ImageUtil {
 
     fun cropImg(file: File?, top: Int, left: Int, width: Int, height: Int) {
         if (file == null) return
-        if (top < 0 
-            || left < 0 
-            || width < 0 
-            || height < 0) return
+        if (top < 0
+            || left < 0
+            || width < 0
+            || height < 0
+        ) return
         try {
             var original = BitmapFactory.decodeFile(file.absolutePath)
             var cropBitmap = Bitmap.createBitmap(original!!, left, top, width, height)
@@ -288,6 +290,6 @@ object ImageUtil {
             e.printStackTrace()
         }
     }
-    
-    
+
+
 }

@@ -119,8 +119,6 @@ class CropView : View {
 
     fun crop(frame: Rect): Bitmap? {
         
-//        val rectCrop = Rect(this.left,this.top,this.right,this.bottom)
-        
         val scale = getScale()
         val src = floatArrayOf(frame.left.toFloat(), frame.top.toFloat())
         val desc = floatArrayOf(0f, 0f)
@@ -130,7 +128,7 @@ class CropView : View {
         val matrix = Matrix()
         val width = (frame.width() / scale).toInt()
         val height = (frame.height() / scale).toInt()
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val originalBitmap = this.bitmap
         matrix.postTranslate(-desc[0], -desc[1])
