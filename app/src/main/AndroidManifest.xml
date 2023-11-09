@@ -14,7 +14,9 @@
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.UiKitDemo"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        tools:replace="android:theme">
+        <activity android:name="com.tech.android.base.uikitdemo.camera.CommonCamera"/>
         <activity
             android:name="com.tech.android.base.uikitdemo.update.UpdateActivity"
             android:exported="false" />

@@ -122,14 +122,13 @@ object AppUpdate {
     }
 
     private fun checkCanUpdateFromStore(context: Context): Boolean {
-        val targetBrandList = updateConfig?.targetBrandList
-        val targetDevice = targetBrandList?.joinToString(separator = ", ")
+        val targetDevice = updateConfig?.targetBrandList ?: ""
 
-        if (targetBrandList.isNullOrEmpty()) return false
+        if (targetDevice.isNullOrEmpty()) return false
         //检查手机是否为中文-中国
         if (!DeviceInfoUtil.IsChineseLanguage()) return false
         //华为手机
-        if (targetDevice!!.contains(
+        if (targetDevice.contains(
                 DeviceInfoUtil.BRAND_HUA_WEI,
                 ignoreCase = true
             ) //目标市场是否存在华为应用市场

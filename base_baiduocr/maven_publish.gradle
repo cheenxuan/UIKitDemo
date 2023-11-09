@@ -5,13 +5,13 @@ task generateSourcesJar(type: Jar) {
     classifier 'sources'
 }
 
-def versionName = "0.0.3"
+def versionName = "0.0.6"
 
 publishing {
     publications {
         Production(MavenPublication) {
-            groupId = "app.android.base"
-            artifactId = "update"
+            groupId = "app.android.third"
+            artifactId = "baiduocr"
             version = versionName
             // 依赖 bundleReleaseAar 任务，并上传其产出的aar
             afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }

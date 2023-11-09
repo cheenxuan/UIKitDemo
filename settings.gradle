@@ -26,8 +26,9 @@ dependencyResolutionManagement {
 }
 rootProject.name = "UiKitDemo"
 include ':app'
-include ':banner'
-include ':recyclerviewkit'
-include ':tabkit'
+include ':ui_banner'
+include ':ui_recyclerviewkit'
+include ':ui_tabkit'
 include ':base_update'
 include ':base_camerakit'
+include ':base_baiduocr'

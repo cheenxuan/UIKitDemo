@@ -40,7 +40,7 @@ class BannerDemoActivity : AppCompatActivity() {
                 bannerMo: BannerMo,
                 position: Int, 
             ) {
-                println(bannerMo.imgUrl)
+                println(bannerMo.banner_img_url)
                 println(position)
             }
         })
@@ -51,7 +51,7 @@ class BannerDemoActivity : AppCompatActivity() {
                 position: Int,
             ) {
                 val img = viewHolder.findViewById<ImageView>(com.tech.android.ui.banner.R.id.banner_img)
-                Glide.with(this@BannerDemoActivity).load(mo.imgUrl).into(img!!)
+                Glide.with(this@BannerDemoActivity).load(mo.banner_img_url).into(img!!)
             }
         })
         banner?.setBannerData(data)

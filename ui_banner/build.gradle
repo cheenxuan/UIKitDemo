@@ -1,19 +1,16 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
 }
-
+apply from : 'maven_publish.gradle'
 
 android {
-    namespace 'com.umpay.linkageguest'
-    compileSdk 33
+    namespace 'com.tech.android.ui.banner'
+    compileSdk 31
 
     defaultConfig {
-        applicationId "com.tech.android.base.uikitdemo"
-        minSdk 24
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        minSdk 21
+        targetSdk 31
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,18 +35,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation project(path: ':ui_banner')
-
-    implementation 'com.github.bumptech.glide:glide:4.15.1'
-
-    implementation 'com.guolindev.permissionx:permissionx:1.7.1'
-
-    implementation project(path: ':base_update')
-    implementation project(path: ':ui_recyclerviewkit')
-    implementation project(path: ':base_camerakit')
-    implementation 'app.android.third:baiduocr:2.0.1'
 }

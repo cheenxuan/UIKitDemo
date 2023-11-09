@@ -45,8 +45,8 @@ class CoreCameraActivity : CameraActivity() {
 //        }
 //    }
 
-    override fun makeFileSucc(contentType: String?, filePath: String?) {
-        super.makeFileSucc(contentType, filePath)
+    override fun makeFileSucc(contentType: String?) {
+        super.makeFileSucc(contentType)
         finish()
     }
 }

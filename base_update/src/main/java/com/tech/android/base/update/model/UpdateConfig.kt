@@ -13,7 +13,7 @@ data class UpdateConfig(
     val isUpdateFromStore: Boolean = true,
     val packageName:String = "",
     val targetStoreUri:String = "",
-    val targetBrandList: MutableList<String> = mutableListOf(),
+    val targetBrandList: String = "",
     var apkUrl: String = "",
     var filePrefix: String = "",
     var filePath: String = "",
@@ -27,7 +27,7 @@ data class UpdateConfig(
 
     fun checkUpdateConfigCorrect(type: String): Boolean {
         if (STORE_TYPE == type) { //商店升级配置检测
-            return isUpdateFromStore && targetBrandList.isNotEmpty()
+            return isUpdateFromStore && targetBrandList.isNotBlank()
         }
 
         if (DOWNLOAD_TYPE == type) {

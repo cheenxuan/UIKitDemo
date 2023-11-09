@@ -42,7 +42,7 @@ class UpdateActivity : AppCompatActivity() {
             AppUpdate.setUpdateConfig(
                 UpdateConfig(
                     isUpdateFromStore = false,
-                    targetBrandList = arrayListOf,
+                    targetBrandList = "",
                     apkUrl = "https://ldyscdn.unnipay.com/apk/liandongplus_release.apk",
                     filePath = applicationContext.cacheDir.absolutePath + "/pic/aaa.jpg",
                     notificationIconRes = R.mipmap.aabbcc
