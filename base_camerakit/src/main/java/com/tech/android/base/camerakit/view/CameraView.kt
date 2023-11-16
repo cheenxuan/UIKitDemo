@@ -516,13 +516,19 @@ class CameraView : FrameLayout {
 
         override fun onPictureTaken(data: ByteArray?) {
             CameraThreadPool.execute {
-                if (file != null && data != null) {
-                    val rotation: Int = ImageUtil.getOrientation(data)
-                    val bitmap: Bitmap? = crop(file!!, data, rotation)
-                    callback?.onPictureTaken(bitmap)
-                } else {
+                try {
+                    if (file != null && data != null) {
+                        val rotation: Int = ImageUtil.getOrientation(data)
+                        val bitmap: Bitmap? = crop(file!!, data, rotation)
+                        callback?.onPictureTaken(bitmap)
+                    } else {
+                        callback?.onPictureTaken(null)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                     callback?.onPictureTaken(null)
                 }
+                
             }
         }
     }

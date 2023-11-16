@@ -239,12 +239,16 @@ class Camera1Control(val context: Context) : ICameraControl {
             takingPicture.set(true)
             cancelAutoFocus()
             execute {
-                camera!!.takePicture(
-                    null, null
-                ) { data, camera ->
-                    startPreview(false)
-                    takingPicture.set(false)
-                    onTakePictureCallback.onPictureTaken(data)
+                try {
+                    camera!!.takePicture(
+                        null, null
+                    ) { data, camera ->
+                        startPreview(false)
+                        takingPicture.set(false)
+                        onTakePictureCallback.onPictureTaken(data)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         } catch (e: RuntimeException) {

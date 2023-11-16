@@ -150,7 +150,7 @@ object ImageUtil {
         dstWidth: Int,
         dstHeight: Int,
         quality: Int = 100,
-        size: Int = 300,
+        imgSize: Int = 300,
     ) {
         try {
             var tempQuality = quality
@@ -176,7 +176,7 @@ object ImageUtil {
             val baos = ByteArrayOutputStream()
             try {
                 roughBitmap!!.compress(Bitmap.CompressFormat.JPEG, tempQuality, baos)
-                while (baos.toByteArray().size / 1024 > size) {
+                while (baos.toByteArray().size / 1024 > imgSize) {
                     baos.reset()
                     roughBitmap.compress(Bitmap.CompressFormat.JPEG, tempQuality, baos)
                     tempQuality -= 5
