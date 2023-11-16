@@ -8,7 +8,13 @@ import android.graphics.Rect
 import android.graphics.SurfaceTexture
 import android.graphics.YuvImage
 import android.hardware.Camera
-import android.hardware.Camera.*
+import android.hardware.Camera.CameraInfo
+import android.hardware.Camera.Parameters
+import android.hardware.Camera.PreviewCallback
+import android.hardware.Camera.Size
+import android.hardware.Camera.getCameraInfo
+import android.hardware.Camera.getNumberOfCameras
+import android.hardware.Camera.open
 import android.view.TextureView
 import android.view.TextureView.SurfaceTextureListener
 import android.view.View
@@ -24,7 +30,7 @@ import com.tech.android.base.camerakit.ICameraControl.OnDetectPictureCallback
 import com.tech.android.base.camerakit.view.CameraView
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.util.*
+import java.util.Collections
 import java.util.concurrent.atomic.AtomicBoolean
 
 
@@ -233,8 +239,10 @@ class Camera1Control(val context: Context) : ICameraControl {
             CameraView.ORIENTATION_INVERT -> parameters?.setRotation(180)
         }
         try {
-            val picSize = getOptimalSize(camera!!.parameters.supportedPictureSizes)
-            parameters!!.setPictureSize(picSize.width, picSize.height)
+            if(parameters == null){
+                val picSize = getOptimalSize(camera!!.parameters.supportedPictureSizes)
+                parameters!!.setPictureSize(picSize.width, picSize.height)
+            }
             camera!!.parameters = parameters
             takingPicture.set(true)
             cancelAutoFocus()
@@ -360,7 +368,8 @@ class Camera1Control(val context: Context) : ICameraControl {
                     try {
                         camera!!.autoFocus { success, camera -> }
                     } catch (e: Throwable) {
-                        // startPreview是异步实现，可能在某些机器上前几次调用会autofocus failß
+                        // startPreview是异步实现，可能在某些机器上前几次调用会autofocus fail
+                        e.printStackTrace()
                     }
                 }
             }
@@ -372,12 +381,12 @@ class Camera1Control(val context: Context) : ICameraControl {
             && camera != null
             && width > 0
         ) {
-            optSize = getOptimalSize(camera!!.parameters.supportedPreviewSizes)
-            parameters!!.setPreviewSize(optSize!!.width, optSize!!.height)
-            previewView!!.setRatio(1.0f * optSize!!.width / optSize!!.height)
-            camera!!.setDisplayOrientation(getSurfaceOrientation())
-            stopPreview()
             try {
+                optSize = getOptimalSize(camera!!.parameters.supportedPreviewSizes)
+                parameters!!.setPreviewSize(optSize!!.width, optSize!!.height)
+                previewView!!.setRatio(1.0f * optSize!!.width / optSize!!.height)
+                camera!!.setDisplayOrientation(getSurfaceOrientation())
+                stopPreview()
                 camera!!.parameters = parameters
             } catch (e: RuntimeException) {
                 e.printStackTrace()
