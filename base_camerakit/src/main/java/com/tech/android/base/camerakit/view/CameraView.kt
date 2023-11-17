@@ -1,7 +1,11 @@
 package com.tech.android.base.camerakit.view
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.BitmapRegionDecoder
+import android.graphics.Matrix
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -181,18 +185,22 @@ class CameraView : FrameLayout {
                 hintResourceId = R.drawable.camera_hint_align_id_card
                 isNeedSetImage = true
             }
+
             MaskView.MASK_TYPE_ID_CARD_BACK -> {
                 hintResourceId = R.drawable.camera_hint_align_id_card_back
                 isNeedSetImage = true
             }
+
             MaskView.MASK_TYPE_BANK_CARD -> {
                 hintResourceId = R.drawable.camera_hint_align_bank_card
                 isNeedSetImage = true
             }
+
             MaskView.MASK_TYPE_NONE -> {
                 maskView?.visibility = INVISIBLE
                 hintView?.visibility = INVISIBLE
             }
+
             else -> {
                 maskView?.visibility = INVISIBLE
                 hintView?.visibility = INVISIBLE
@@ -363,95 +371,83 @@ class CameraView : FrameLayout {
             val height = if (rotation % 180 == 0) decoder.height else decoder.width
             val frameRect = maskView!!.getFrameRect()
 
-            var left = width * frameRect.left / maskView!!.width
-            var top = height * frameRect.top / maskView!!.height
-            var right = width * frameRect.right / maskView!!.width
-            var bottom = height * frameRect.bottom / maskView!!.height
+            val widthScale = 1.0f * width / maskView!!.width
+            val heightScale = 1.0f * height / maskView!!.height
+
+            var left = 1.0f * frameRect.left * widthScale
+            var right = 1.0f * frameRect.right * widthScale
+            var top = 1.0f * frameRect.top * heightScale
+            var bottom = 1.0f * frameRect.bottom * heightScale
 
             // 高度大于图片 
             if (previewFrame.top < 0) {
-                val scaleWidth = width.toFloat() / previewFrame.width().toFloat()
-                val scaleHeight = getWidth().toFloat() / previewFrame.width().toFloat()
-                
-                val adjustedPreviewWidth = previewFrame.width().toFloat() * scaleWidth
-                val adjustedPreviewHeight = previewFrame.height() * scaleHeight
-                
-                val scale = getHeight().toFloat() / previewFrame.height().toFloat()
-                
-                // 等比例投射到照片当中。
-                if (scaleWidth != 1f) {
-                    left =
-                        ((adjustedPreviewWidth - frameRect.width() * scale * scaleWidth) / 2f).toInt()
-                    right =
-                        ((adjustedPreviewWidth + frameRect.width() * scale * scaleWidth) / 2f).toInt()
-                }
-
+                // 宽度对齐。
+                val adjustedPreviewHeight =
+                    1.0f * previewFrame.height() * getWidth() / previewFrame.width()
                 val topInFrame =
-                    (adjustedPreviewHeight - frameRect.height()) / 2 * getWidth() / previewFrame.width()
+                    1.0f * (adjustedPreviewHeight - frameRect.height()) / 2f * getWidth() / previewFrame.width()
                 val bottomInFrame =
-                    ((adjustedPreviewHeight + frameRect.height()) / 2 * getWidth() / previewFrame.width())
-                // 等比例投射到照片当中。
-                top = (topInFrame * height / previewFrame.height()).toInt()
-                bottom = (bottomInFrame * height / previewFrame.height()).toInt()
-            } else if (previewFrame.left < 0) {
-                val scaleHeight = height.toFloat() / previewFrame.height().toFloat()
-                val adjustedPreviewHeight = previewFrame.height().toFloat() * scaleHeight
-
-                val scaleWidth = getHeight().toFloat() / previewFrame.height().toFloat()
-                val scale = getWidth().toFloat() / previewFrame.width().toFloat()
-              
-                // 等比例投射到照片当中。
-                if (scaleHeight != 1f) {
-                    top = ((adjustedPreviewHeight - frameRect.height() * scale * scaleHeight) / 2f).toInt()
-                    bottom = ((adjustedPreviewHeight + frameRect.height() * scale * scaleHeight) / 2f).toInt()
-                }
-
-                // 高度对齐
-                val adjustedPreviewWidth = previewFrame.width() * scaleWidth
-                val leftInFrame = (adjustedPreviewWidth - maskView!!.getFrameRect().width()) / 2 * scaleWidth
-                val rightInFrame = (adjustedPreviewWidth + maskView!!.getFrameRect().width()) / 2 * scaleWidth
+                    1.0f * (adjustedPreviewHeight + frameRect.height()) / 2f * getWidth() / previewFrame.width()
 
                 // 等比例投射到照片当中。
-                left = (leftInFrame * width / previewFrame.width()).toInt()
-                right = (rightInFrame * width / previewFrame.width()).toInt()
-            }
+                top = topInFrame * height / previewFrame.height()
+                bottom = bottomInFrame * height / previewFrame.height()
 
-            // 高度大于图片
-//            if (previewFrame.top < 0) {
-//                // 宽度对齐。
-//                val adjustedPreviewHeight =
-//                    previewFrame.height() * getWidth() / previewFrame.width()
-//                val topInFrame = (adjustedPreviewHeight - frameRect.height()) / 2 * getWidth() / previewFrame.width()
-//                val bottomInFrame = ((adjustedPreviewHeight + frameRect.height()) / 2 * getWidth()
-//                        / previewFrame.width())
-//
-//                // 等比例投射到照片当中。
-//                top = topInFrame * height / previewFrame.height()
-//                bottom = bottomInFrame * height / previewFrame.height()
-//            } else {
-//                // 宽度大于图片
-//                if (previewFrame.left < 0) {
+                if (widthScale > 2f) {
 //                    // 高度对齐
 //                    val adjustedPreviewWidth =
-//                        previewFrame.width() * getHeight() / previewFrame.height()
-//                    val leftInFrame = ((adjustedPreviewWidth - maskView!!.getFrameRect()
-//                        .width()) / 2 * getHeight()
-//                            / previewFrame.height())
-//                    val rightInFrame = ((adjustedPreviewWidth + maskView!!.getFrameRect()
-//                        .width()) / 2 * getHeight()
-//                            / previewFrame.height())
+//                        1.0f * previewFrame.width() * getWidth() / previewFrame.width()
+//                    val leftInFrame =
+//                        1.0f * (adjustedPreviewWidth - frameRect.width()) / 2f * getWidth() / previewFrame.width()
+//                    val rightInFrame =
+//                        1.0f * (adjustedPreviewWidth + frameRect.width()) / 2f * getWidth() / previewFrame.width()
 //
 //                    // 等比例投射到照片当中。
 //                    left = leftInFrame * width / previewFrame.width()
-//                    right = rightInFrame * width / previewFrame.width()
-//                }
-//            }
+//                    right = rightInFrame * width / previewFrame.width()`
+
+                    val scaleWidth = 1.0f * width / previewFrame.width()
+
+                    val adjustedPreviewWidth = previewFrame.width().toFloat() * scaleWidth
+                    val scale = getHeight().toFloat() / previewFrame.height().toFloat()
+
+                    // 等比例投射到照片当中。
+                    left = (adjustedPreviewWidth - frameRect.width() * scale * scaleWidth) / 2f
+                    right = (adjustedPreviewWidth + frameRect.width() * scale * scaleWidth) / 2f
+                }
+
+            } else if (previewFrame.left < 0) {
+                // 高度对齐
+                val adjustedPreviewWidth =
+                    1.0f * previewFrame.width() * getHeight() / previewFrame.height()
+                val leftInFrame =
+                    1.0f * (adjustedPreviewWidth - frameRect.width()) / 2f * getHeight() / previewFrame.height()
+                val rightInFrame =
+                    1.0f * (adjustedPreviewWidth + frameRect.width()) / 2f * getHeight() / previewFrame.height()
+
+                // 等比例投射到照片当中。
+                left = leftInFrame * width / previewFrame.width()
+                right = rightInFrame * width / previewFrame.width()
+
+
+                // 等比例投射到照片当中。
+                if (heightScale > 2f) {
+
+                    val scaleHeight = height.toFloat() / previewFrame.height().toFloat()
+                    val adjustedPreviewHeight = previewFrame.height().toFloat() * scaleHeight
+
+                    val scale = getWidth().toFloat() / previewFrame.width().toFloat()
+
+                    top = (adjustedPreviewHeight - frameRect.height() * scale * scaleHeight) / 2f
+                    bottom = (adjustedPreviewHeight + frameRect.height() * scale * scaleHeight) / 2f
+                }
+            }
 
             val region = Rect()
-            region.left = left
-            region.top = top
-            region.right = right
-            region.bottom = bottom
+            region.left = left.toInt()
+            region.top = top.toInt()
+            region.right = right.toInt()
+            region.bottom = bottom.toInt()
 
             // 90度或者270度旋转
             if (rotation % 180 == 90) {

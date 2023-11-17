@@ -239,10 +239,8 @@ class Camera1Control(val context: Context) : ICameraControl {
             CameraView.ORIENTATION_INVERT -> parameters?.setRotation(180)
         }
         try {
-            if(parameters == null){
-                val picSize = getOptimalSize(camera!!.parameters.supportedPictureSizes)
-                parameters!!.setPictureSize(picSize.width, picSize.height)
-            }
+            val picSize = getOptimalSize(camera!!.parameters.supportedPictureSizes)
+            parameters!!.setPictureSize(picSize.width, picSize.height)
             camera!!.parameters = parameters
             takingPicture.set(true)
             cancelAutoFocus()
