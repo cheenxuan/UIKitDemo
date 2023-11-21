@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UiKitDemo"
         tools:targetApi="31"
+        android:name="com.tech.android.base.uikitdemo.DemoApplication"
         tools:replace="android:theme">
         <activity android:name="com.tech.android.base.uikitdemo.camera.CommonCamera"/>
         <activity

@@ -48,7 +48,7 @@ class CircleIndicator @JvmOverloads constructor(
 
     init {
         mPointLeftRightPadding = dp2px(5f, context.resources)
-        mPointTopBottomPadding = dp2px(8f, context.resources)
+        mPointTopBottomPadding = dp2px(10f, context.resources)
     }
 
     override fun get(): FrameLayout {

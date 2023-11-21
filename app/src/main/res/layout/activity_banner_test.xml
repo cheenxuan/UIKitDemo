@@ -9,7 +9,7 @@
     <com.tech.android.ui.banner.Banner
         android:id="@+id/banner"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="130dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 

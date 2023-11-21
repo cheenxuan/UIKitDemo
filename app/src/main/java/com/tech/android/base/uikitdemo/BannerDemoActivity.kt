@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.tech.android.base.log.VLog
 import com.tech.android.base.uikitdemo.banner.BannerInfo
 import com.tech.android.ui.banner.*
 import com.umpay.linkageguest.R
@@ -41,7 +42,9 @@ class BannerDemoActivity : AppCompatActivity() {
                 position: Int, 
             ) {
                 println(bannerMo.banner_img_url)
+                VLog.d(bannerMo.banner_img_url)
                 println(position)
+                VLog.d(position)
             }
         })
         banner?.setBindAdapter(object : IBindAdapter {

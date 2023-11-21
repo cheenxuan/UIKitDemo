@@ -14,13 +14,24 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
+        ndk { abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86' }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(rootProject.ext.sign.storeKey)
+            storePassword rootProject.ext.sign.storePassword
+            keyAlias rootProject.ext.sign.keyAlias
+            keyPassword rootProject.ext.sign.keyPassword
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -51,5 +62,5 @@ dependencies {
     implementation project(path: ':base_update')
     implementation project(path: ':ui_recyclerviewkit')
     implementation project(path: ':base_camerakit')
-    implementation 'app.android.third:baiduocr:2.0.1'
+    implementation project(path: ':base_log')
 }
