@@ -102,7 +102,7 @@ open class CameraActivity : FragmentActivity() {
     }
 
     private val albumButtonOnClickListener = View.OnClickListener {
-        openAlbum()
+        requireStorePermission()
     }
 
     private val lightButtonOnClickListener = View.OnClickListener {
@@ -539,7 +539,7 @@ open class CameraActivity : FragmentActivity() {
             }
             PERMISSIONS_EXTERNAL_STORAGE -> {
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    openAlbum()
+                    requireStorePermission()
                 } else {
                     showToastMessage(getString(R.string.read_storage_permission_required))
                 }
@@ -550,6 +550,10 @@ open class CameraActivity : FragmentActivity() {
 
     open fun showToastMessage(message: String) {
 
+    }
+    
+    open fun requireStorePermission(){
+        openAlbum()
     }
 
     open fun restart() {
